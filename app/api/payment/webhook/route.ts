@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import * as crypto from 'crypto';
 import {
   createOrUpdateSubscription,
@@ -9,6 +8,77 @@ import {
   findSubscriptionByCreemId,
   cancelUserSubscription,
 } from '@/lib/db/queries';
+
+type UnknownRecord = Record<string, unknown>;
+
+type CreemCheckoutMetadata = UnknownRecord & {
+  userId: string;
+  paymentType: 'single_course' | 'subscription' | 'lifetime';
+  lessonId?: string;
+};
+
+type CreemOrder = UnknownRecord & {
+  id: string;
+  transaction?: string | null;
+  amount: number;
+  currency: string;
+};
+
+type CreemCustomer = UnknownRecord & {
+  id: string;
+};
+
+type CreemSubscriptionPayload = UnknownRecord & {
+  id: string;
+  customer: { id: string };
+  current_period_start_date?: string | null;
+  current_period_end_date?: string | null;
+};
+
+type CreemCheckoutPayload = UnknownRecord & {
+  order: CreemOrder;
+  customer: CreemCustomer;
+  subscription?: CreemSubscriptionPayload | null;
+  metadata?: CreemCheckoutMetadata | null;
+};
+
+type CreemWebhookEvent = {
+  eventType: string;
+  id: string;
+  object?: unknown;
+};
+
+const isRecord = (value: unknown): value is UnknownRecord =>
+  typeof value === 'object' && value !== null;
+
+const isCheckoutPayload = (value: unknown): value is CreemCheckoutPayload => {
+  if (!isRecord(value)) return false;
+  const checkout = value as UnknownRecord;
+  const { order, customer } = checkout;
+
+  if (!isRecord(order) || !isRecord(customer)) return false;
+
+  const hasOrderFields =
+    typeof (order as UnknownRecord).id === 'string' &&
+    typeof (order as UnknownRecord).amount === 'number' &&
+    typeof (order as UnknownRecord).currency === 'string';
+
+  const hasCustomerFields = typeof (customer as UnknownRecord).id === 'string';
+
+  return hasOrderFields && hasCustomerFields;
+};
+
+const isSubscriptionPayload = (value: unknown): value is CreemSubscriptionPayload => {
+  if (!isRecord(value)) return false;
+  const subscription = value as UnknownRecord;
+  const customer = (subscription.customer ?? {}) as UnknownRecord;
+
+  return (
+    typeof subscription.id === 'string' &&
+    isRecord(subscription.customer) &&
+    typeof customer.id === 'string'
+  );
+};
 
 // 验证Creem webhook签名
 function verifyCreemSignature(payload: string, signature: string, secret: string): boolean {
@@ -36,23 +106,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
-    const event = JSON.parse(payload);
+    const event = JSON.parse(payload) as CreemWebhookEvent;
     console.log('Received Creem webhook:', event.eventType, event.id);
 
     switch (event.eventType) {
       case 'checkout.completed':
+        if (!isCheckoutPayload(event.object)) {
+          console.error('Invalid checkout payload');
+          break;
+        }
         await handleCheckoutCompleted(event.object);
         break;
       
       case 'subscription.paid':
+        if (!isSubscriptionPayload(event.object)) {
+          console.error('Invalid subscription payload');
+          break;
+        }
         await handleSubscriptionPaid(event.object);
         break;
       
       case 'subscription.canceled':
+        if (!isSubscriptionPayload(event.object)) {
+          console.error('Invalid subscription payload');
+          break;
+        }
         await handleSubscriptionCanceled(event.object);
         break;
       
       case 'subscription.expired':
+        if (!isSubscriptionPayload(event.object)) {
+          console.error('Invalid subscription payload');
+          break;
+        }
         await handleSubscriptionExpired(event.object);
         break;
       
@@ -68,10 +154,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handleCheckoutCompleted(checkout: any) {
-  const { order, product, customer, subscription, metadata } = checkout;
+async function handleCheckoutCompleted(checkout: CreemCheckoutPayload) {
+  const { order, customer, subscription, metadata } = checkout;
   
-  if (!metadata?.userId) {
+  if (!metadata || typeof metadata.userId !== 'string') {
     console.error('Missing userId in checkout metadata');
     return;
   }
@@ -79,7 +165,14 @@ async function handleCheckoutCompleted(checkout: any) {
   const userId = metadata.userId;
   const paymentType = metadata.paymentType;
 
+  if (!paymentType) {
+    console.error('Missing paymentType in checkout metadata');
+    return;
+  }
+
   // 创建支付交易记录
+  const lessonIdValue = typeof metadata.lessonId === 'string' ? metadata.lessonId : undefined;
+
   await createPaymentTransaction({
     userId,
     creemTransactionId: order.transaction || order.id,
@@ -90,21 +183,20 @@ async function handleCheckoutCompleted(checkout: any) {
     status: 'paid',
     amount: order.amount,
     currency: order.currency,
-    lessonId: metadata.lessonId ? (await getLessonById(metadata.lessonId))?.id : undefined,
-    metadata: checkout,
+    lessonId: lessonIdValue ? (await getLessonById(lessonIdValue))?.id : undefined,
+    metadata: checkout as UnknownRecord,
   });
 
   if (paymentType === 'single_course') {
     // 处理单课程购买
-    const lessonId = metadata.lessonId;
-    if (!lessonId) {
+    if (!lessonIdValue) {
       console.error('Missing lessonId for single course purchase');
       return;
     }
 
-    const lesson = await getLessonById(lessonId);
+    const lesson = await getLessonById(lessonIdValue);
     if (!lesson) {
-      console.error('Lesson not found:', lessonId);
+      console.error('Lesson not found:', lessonIdValue);
       return;
     }
 
@@ -147,7 +239,7 @@ async function handleCheckoutCompleted(checkout: any) {
   }
 }
 
-async function handleSubscriptionPaid(subscription: any) {
+async function handleSubscriptionPaid(subscription: CreemSubscriptionPayload) {
   const existingSubscription = await findSubscriptionByCreemId(subscription.id);
   
   if (existingSubscription) {
@@ -165,7 +257,7 @@ async function handleSubscriptionPaid(subscription: any) {
   }
 }
 
-async function handleSubscriptionCanceled(subscription: any) {
+async function handleSubscriptionCanceled(subscription: CreemSubscriptionPayload) {
   const existingSubscription = await findSubscriptionByCreemId(subscription.id);
   
   if (existingSubscription) {
@@ -174,7 +266,7 @@ async function handleSubscriptionCanceled(subscription: any) {
   }
 }
 
-async function handleSubscriptionExpired(subscription: any) {
+async function handleSubscriptionExpired(subscription: CreemSubscriptionPayload) {
   const existingSubscription = await findSubscriptionByCreemId(subscription.id);
   
   if (existingSubscription) {

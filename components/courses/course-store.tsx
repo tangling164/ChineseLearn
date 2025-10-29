@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PlayCircle, Clock, CheckCircle, Star, Zap, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 // Define types based on the database schema
 type Lesson = {
@@ -135,8 +136,8 @@ export function CourseStore({ lessons, userProgress, userSubscription, userPurch
           </div>
           {selectedTags.length > 0 && (
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              Showing {filteredLessons.length} course{filteredLessons.length !== 1 ? 's' : ''} 
-              for: {selectedTags.join(', ')}
+              Showing {filteredLessons.length} course{filteredLessons.length !== 1 ? "s" : ""} 
+              for: {selectedTags.join(", ")}
             </p>
           )}
         </CardContent>
@@ -169,6 +170,12 @@ export function CourseStore({ lessons, userProgress, userSubscription, userPurch
   );
 }
 
+type CheckoutResponse = {
+  success: boolean;
+  checkout_url?: string;
+  message?: string;
+};
+
 function CourseCard({ 
   lesson, 
   progress,
@@ -196,20 +203,22 @@ function CourseCard({
   const hasActiveSubscription = userSubscription?.status === 'active';
   const canAccess = isFree || hasActiveSubscription || hasPurchased;
 
+  const [hasImageError, setHasImageError] = useState(false);
+
   const handlePurchaseCourse = async () => {
     try {
-      const response = await fetch('/api/payment/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'single_course', lessonId: lesson.lessonId }),
+      const response = await fetch("/api/payment/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "single_course", lessonId: lesson.lessonId }),
       });
       
-      const data = await response.json();
+      const data = (await response.json()) as CheckoutResponse;
       if (data.success) {
-        window.location.href = data.checkout_url;
+        window.location.href = data.checkout_url ?? "/dashboard";
       }
-    } catch (error) {
-      console.error('Purchase failed:', error);
+    } catch (error: unknown) {
+      console.error("Purchase failed:", error);
     }
   };
 
@@ -221,33 +230,22 @@ function CourseCard({
     <Card className="group hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       {/* Cover Image */}
       <div className="aspect-video relative overflow-hidden bg-gray-100 dark:bg-gray-800">
-        {lesson.cover ? (
-          <img 
-            src={lesson.cover} 
+        {(!hasImageError && lesson.cover) ? (
+          <Image
+            src={lesson.cover}
             alt={lesson.titleEn}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              // Fallback to gradient background if image fails to load
-              const target = e.target as HTMLElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.className = "aspect-video bg-gradient-to-br from-blue-100 to-orange-100 dark:from-blue-900/20 dark:to-orange-900/20 relative overflow-hidden flex items-center justify-center";
-                const fallback = document.createElement('div');
-                fallback.className = "text-4xl opacity-30";
-                fallback.textContent = lesson.tag === 'Greeting' ? '👋' : 
-                                     lesson.tag === 'Conversation' ? '💬' : 
-                                     lesson.tag === 'Food' ? '🍜' : '📚';
-                parent.appendChild(fallback);
-              }
-            }}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            onError={() => setHasImageError(true)}
+            priority={false}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-blue-100 to-orange-100 dark:from-blue-900/20 dark:to-orange-900/20 flex items-center justify-center">
             <div className="text-4xl opacity-30">
-              {lesson.tag === 'Greeting' ? '👋' : 
-               lesson.tag === 'Conversation' ? '💬' : 
-               lesson.tag === 'Food' ? '🍜' : '📚'}
+              {lesson.tag === "Greeting" ? "👋" : 
+               lesson.tag === "Conversation" ? "💬" : 
+               lesson.tag === "Food" ? "🍜" : "📚"}
             </div>
           </div>
         )}

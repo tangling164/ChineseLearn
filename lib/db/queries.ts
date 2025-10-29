@@ -8,7 +8,9 @@ import {
   userCoursePurchases,
   paymentTransactions,
 } from './schema';
-import { eq, and, desc, count, sum, avg, gte, or } from 'drizzle-orm';
+import { eq, and, desc, count, sum, avg, gte } from 'drizzle-orm';
+
+type PaymentMetadata = Record<string, unknown> | null;
 
 // 课程相关查询
 export async function getAllLessons() {
@@ -530,7 +532,7 @@ export async function createPaymentTransaction(data: {
   amount: number;
   currency: string;
   lessonId?: number;
-  metadata?: any;
+  metadata?: PaymentMetadata;
 }) {
   const [created] = await db
     .insert(paymentTransactions)
@@ -544,7 +546,7 @@ export async function updatePaymentTransaction(
   creemTransactionId: string, 
   updates: {
     status?: string;
-    metadata?: any;
+    metadata?: PaymentMetadata;
     updatedAt?: Date;
   }
 ) {

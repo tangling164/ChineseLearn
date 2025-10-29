@@ -6,11 +6,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
+type PaymentStatus = 'loading' | 'success' | 'failed';
+
+type PaymentMetadata = {
+  paymentType?: 'single_course' | 'subscription' | 'lifetime';
+  [key: string]: unknown;
+} | null;
+
+type PaymentVerificationResponse = {
+  success: boolean;
+  status: string;
+  metadata?: PaymentMetadata;
+};
+
 export default function PaymentSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [paymentStatus, setPaymentStatus] = useState<'loading' | 'success' | 'failed'>('loading');
-  const [paymentDetails, setPaymentDetails] = useState<any>(null);
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('loading');
+  const [paymentDetails, setPaymentDetails] = useState<PaymentVerificationResponse | null>(null);
 
   useEffect(() => {
     const checkoutId = searchParams.get('checkout_id');
@@ -23,7 +36,7 @@ export default function PaymentSuccessPage() {
     const verifyPayment = async () => {
       try {
         const response = await fetch(`/api/payment/status?checkout_id=${checkoutId}`);
-        const data = await response.json();
+        const data = (await response.json()) as PaymentVerificationResponse;
 
         if (data.success && data.status === 'completed') {
           setPaymentStatus('success');
@@ -31,7 +44,7 @@ export default function PaymentSuccessPage() {
         } else {
           setPaymentStatus('failed');
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Payment verification failed:', error);
         setPaymentStatus('failed');
       }
@@ -130,7 +143,7 @@ export default function PaymentSuccessPage() {
         </CardHeader>
         <CardContent className="text-center">
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            We couldn't verify your payment status. Please check your email for confirmation or contact support.
+            We could not verify your payment status. Please check your email for confirmation or contact support.
           </p>
           
           <div className="space-y-3">

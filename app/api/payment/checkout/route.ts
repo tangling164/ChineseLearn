@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getLessonById } from '@/lib/db/queries';
 
 interface CheckoutRequest {
   type: 'single_course' | 'subscription' | 'lifetime';
