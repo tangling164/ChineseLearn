@@ -17,6 +17,16 @@
 DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
 ```
 
+如果你的网络无法访问 Supabase 的 IPv6 地址，迁移时可以通过以下任一方式强制使用连接池（IPv4）：
+
+```env
+# 直接指定迁移连接串（可与 DATABASE_URL 相同）
+SUPABASE_MIGRATIONS_URL=postgresql://postgres:[YOUR-PASSWORD]@aws-1-us-east-1.pooler.supabase.com:6543/postgres
+
+# 或者开启布尔开关，让迁移复用 DATABASE_URL
+SUPABASE_MIGRATIONS_USE_POOLER=true
+```
+
 ## 可用脚本
 
 ```bash

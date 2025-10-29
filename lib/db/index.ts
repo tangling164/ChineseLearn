@@ -1,22 +1,18 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { config } from 'dotenv';
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { config as loadEnv } from "dotenv";
+import { resolveDatabaseConnection } from "./connection-string";
 
-// 加载环境变量
-config();
+// Ensure local `.env` files populate process.env when running scripts or tests.
+loadEnv({ path: ".env" });
+loadEnv({ path: ".env.local", override: true });
 
-// 从环境变量获取数据库URL
-const connectionString = process.env.DATABASE_URL;
+const { connectionString, usesSupabasePooler } = resolveDatabaseConnection("runtime");
 
-if (!connectionString) {
-  throw new Error('DATABASE_URL environment variable is not set');
-}
+const client = postgres(connectionString, {
+  // Prepared statements are incompatible with Supabase's transaction pooler.
+  prepare: !usesSupabasePooler,
+});
 
-// 创建postgres连接
-const client = postgres(connectionString);
-
-// 创建drizzle实例
 export const db = drizzle(client);
-
-// 导出类型
 export type Database = typeof db;
