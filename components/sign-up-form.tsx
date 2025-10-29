@@ -29,28 +29,62 @@ export function SignUpForm({
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
-
-    if (password !== repeatPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
+    
+    if (!email || !password || !repeatPassword) {
+      setError("Please fill in all fields");
       return;
     }
 
+    if (password !== repeatPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    const supabase = createClient();
+    
+    // 检查环境变量
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      console.error("Missing NEXT_PUBLIC_SUPABASE_URL");
+      setError("Configuration error: Missing Supabase URL");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
     try {
-      const { error } = await supabase.auth.signUp({
+      const redirectUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}/dashboard` 
+        : '/dashboard';
+      
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
+          emailRedirectTo: redirectUrl,
         },
       });
-      if (error) throw error;
-      router.push("/auth/sign-up-success");
+      
+      if (error) {
+        console.error("Sign up error:", error);
+        throw error;
+      }
+      
+      // 即使需要邮箱验证，也跳转到成功页面
+      if (data?.user) {
+        router.push("/auth/sign-up-success");
+        router.refresh();
+      } else {
+        setError("Failed to create account. Please try again.");
+      }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      console.error("Sign up exception:", error);
+      setError(error instanceof Error ? error.message : "An error occurred during sign up");
     } finally {
       setIsLoading(false);
     }

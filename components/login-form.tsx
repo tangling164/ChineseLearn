@@ -28,20 +28,43 @@ export function LoginForm({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
     const supabase = createClient();
+    
+    // 检查环境变量
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      console.error("Missing NEXT_PUBLIC_SUPABASE_URL");
+      setError("Configuration error: Missing Supabase URL");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/dashboard");
+      
+      if (error) {
+        console.error("Login error:", error);
+        throw error;
+      }
+      
+      if (data?.user) {
+        // Update this route to redirect to an authenticated route. The user already has an active session.
+        router.push("/dashboard");
+        router.refresh();
+      }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      console.error("Login exception:", error);
+      setError(error instanceof Error ? error.message : "An error occurred during login");
     } finally {
       setIsLoading(false);
     }
