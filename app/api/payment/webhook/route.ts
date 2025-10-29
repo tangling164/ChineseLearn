@@ -214,6 +214,11 @@ async function handleCheckoutCompleted(checkout: CreemCheckoutPayload) {
 
   } else if (paymentType === 'subscription') {
     // 处理订阅购买
+    if (!subscription) {
+      console.error('Missing subscription payload for subscription payment');
+      return;
+    }
+
     await createOrUpdateSubscription({
       userId,
       subscriptionType: 'pro',
