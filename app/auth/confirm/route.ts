@@ -13,10 +13,12 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient();
 
   // 支持 token_hash 或 token 参数
-  if ((token_hash || token) && type) {
+  const actualToken = token_hash || token;
+  
+  if (actualToken && type) {
     const { data, error } = await supabase.auth.verifyOtp({
       type,
-      token_hash: token_hash || token || undefined,
+      token_hash: actualToken,
     });
 
     if (!error && data?.user) {
