@@ -1,9 +1,4 @@
-import dynamic from "next/dynamic";
-
-const LoginForm = dynamic(async () => {
-  const loginModule = await import("@/components/login-form");
-  return { default: loginModule.LoginForm };
-}, { ssr: false });
+import { LoginForm } from "@/components/login-form";
 
 export default function Page() {
   return (
