@@ -13,8 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export function LoginForm({
   className,
@@ -23,8 +23,18 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // 检查是否有确认成功的参数
+    if (searchParams.get("confirmed") === "true") {
+      setSuccess("Your email has been confirmed. Please log in.");
+    }
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +64,13 @@ export function LoginForm({
       
       if (error) {
         console.error("Login error:", error);
+        
+        // 处理邮箱未确认的错误
+        if (error.message.includes("Email not confirmed") || error.message.includes("email_not_confirmed")) {
+          setError("Please confirm your email before logging in. Check your inbox for the confirmation email.");
+          return;
+        }
+        
         throw error;
       }
       
@@ -64,9 +81,49 @@ export function LoginForm({
       }
     } catch (error: unknown) {
       console.error("Login exception:", error);
-      setError(error instanceof Error ? error.message : "An error occurred during login");
+      const errorMessage = error instanceof Error ? error.message : "An error occurred during login";
+      
+      // 再次检查是否是邮箱未确认错误
+      if (errorMessage.includes("Email not confirmed") || errorMessage.includes("email_not_confirmed")) {
+        setError("Please confirm your email before logging in. Check your inbox for the confirmation email.");
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    if (!email) {
+      setError("Please enter your email address first");
+      return;
+    }
+
+    setIsResendingConfirmation(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      setSuccess("Confirmation email has been sent. Please check your inbox.");
+    } catch (error: unknown) {
+      console.error("Resend confirmation error:", error);
+      setError(error instanceof Error ? error.message : "Failed to resend confirmation email");
+    } finally {
+      setIsResendingConfirmation(false);
     }
   };
 
@@ -111,7 +168,26 @@ export function LoginForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {success && (
+                <div className="rounded-md bg-green-50 dark:bg-green-900/20 p-3">
+                  <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
+                </div>
+              )}
+              {error && (
+                <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3">
+                  <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+                  {(error.includes("confirm your email") || error.includes("Email not confirmed")) && (
+                    <button
+                      type="button"
+                      onClick={handleResendConfirmation}
+                      disabled={isResendingConfirmation || !email}
+                      className="mt-2 text-sm text-red-600 dark:text-red-400 underline hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isResendingConfirmation ? "Sending..." : "Resend confirmation email"}
+                    </button>
+                  )}
+                </div>
+              )}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>

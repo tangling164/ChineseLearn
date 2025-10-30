@@ -58,15 +58,15 @@ export function SignUpForm({
     setError(null);
 
     try {
-      const redirectUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/dashboard` 
-        : '/dashboard';
+      const confirmUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}/auth/confirm` 
+        : '/auth/confirm';
       
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: redirectUrl,
+          emailRedirectTo: confirmUrl,
         },
       });
       
