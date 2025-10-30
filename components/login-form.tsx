@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export function LoginForm({
@@ -27,14 +27,19 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // 检查是否有确认成功的参数
-    if (searchParams.get("confirmed") === "true") {
-      setSuccess("Your email has been confirmed. Please log in.");
+    // 检查是否有确认成功的参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("confirmed") === "true") {
+        setSuccess("Your email has been confirmed. Please log in.");
+        // 清理 URL 参数
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      }
     }
-  }, [searchParams]);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
