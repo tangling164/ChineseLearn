@@ -34,9 +34,19 @@ type GoogleAccountsId = {
     nonce?: string;
     use_fedcm_for_prompt?: boolean;
   }) => void;
-  prompt: (momentListener?: (promptMomentNotification: unknown) => void) => void;
+  prompt: (
+    momentListener?: (promptMomentNotification: GooglePromptMomentNotification) => void,
+  ) => void;
   cancel: () => void;
 };
+
+interface GooglePromptMomentNotification {
+  isNotDisplayed?: () => boolean;
+  getNotDisplayedReason?: () => string | undefined;
+  isDismissed?: () => boolean;
+  getDismissedReason?: () => string | undefined;
+  isDisplayed?: () => boolean;
+}
 
 declare global {
   interface Window {
@@ -142,7 +152,7 @@ export function LoginForm({
       }
 
       setIsGoogleReady(true);
-      googleAccounts.prompt((notification: any) => {
+      googleAccounts.prompt((notification: GooglePromptMomentNotification) => {
         try {
           const notDisplayed = notification?.isNotDisplayed?.();
           if (notDisplayed) {
