@@ -59,6 +59,7 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [googleInfo, setGoogleInfo] = useState<string | null>(null);
   const [isGoogleRedirectLoading, setIsGoogleRedirectLoading] = useState(false);
   const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
@@ -133,6 +134,7 @@ export function LoginForm({
         },
         cancel_on_tap_outside: false,
         context: "signin",
+        use_fedcm_for_prompt: true,
       });
 
       if (!isMounted) {
@@ -140,7 +142,30 @@ export function LoginForm({
       }
 
       setIsGoogleReady(true);
-      googleAccounts.prompt();
+      googleAccounts.prompt((notification: any) => {
+        try {
+          const notDisplayed = notification?.isNotDisplayed?.();
+          if (notDisplayed) {
+            const reason = notification?.getNotDisplayedReason?.();
+            console.warn("One Tap not displayed:", reason);
+            setGoogleInfo("无法显示 Google 一键登录，已提供按钮登录。");
+          }
+
+          const dismissed = notification?.isDismissed?.();
+          if (dismissed) {
+            const reason = notification?.getDismissedReason?.();
+            console.warn("One Tap dismissed:", reason);
+            // 用户主动关闭，不提示错误，只保留按钮降级
+          }
+
+          const displayed = notification?.isDisplayed?.();
+          if (displayed) {
+            setGoogleInfo(null);
+          }
+        } catch (e) {
+          console.error("One Tap prompt listener error:", e);
+        }
+      });
     };
 
     if (window.google?.accounts?.id) {
@@ -350,6 +375,11 @@ export function LoginForm({
               {success && (
                 <div className="rounded-md bg-green-50 dark:bg-green-900/20 p-3">
                   <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
+                </div>
+              )}
+              {googleInfo && (
+                <div className="rounded-md bg-amber-50 dark:bg-amber-900/20 p-3">
+                  <p className="text-sm text-amber-800 dark:text-amber-200">{googleInfo}</p>
                 </div>
               )}
               {error && (
