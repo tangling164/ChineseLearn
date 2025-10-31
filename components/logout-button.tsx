@@ -4,6 +4,19 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
+declare global {
+  interface Window {
+    google?: {
+      accounts?: {
+        id?: {
+          cancel?: () => void;
+          disableAutoSelect?: () => void;
+        };
+      };
+    };
+  }
+}
+
 export function LogoutButton() {
   const router = useRouter();
 
@@ -18,9 +31,7 @@ export function LogoutButton() {
         );
         // 关闭可能存在的 One Tap 弹窗
         // 关闭自动选择，避免按钮或弹窗携带上次用户信息
-        // @ts-expect-error optional chaining for GIS
         window.google?.accounts?.id?.cancel?.();
-        // @ts-expect-error optional chaining for GIS
         window.google?.accounts?.id?.disableAutoSelect?.();
       }
     } catch {
