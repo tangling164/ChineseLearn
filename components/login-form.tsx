@@ -85,7 +85,6 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [googleInfo, setGoogleInfo] = useState<string | null>(null);
   const [isGoogleRedirectLoading, setIsGoogleRedirectLoading] = useState(false);
   const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
@@ -93,14 +92,21 @@ export function LoginForm({
   const googleButtonContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // 检查是否有确认成功的参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
+    // 检查是否有确认成功/登出参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("confirmed") === "true") {
         setSuccess("Your email has been confirmed. Please log in.");
-        // 清理 URL 参数
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
+      }
+      // 登出后抑制 One Tap 弹窗（本会话内）
+      if (params.get("logout") === "true") {
+        try {
+          sessionStorage.setItem("skipOneTap", "1");
+        } catch {}
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, "", cleanUrl);
       }
     }
   }, []);
@@ -163,6 +169,7 @@ export function LoginForm({
         cancel_on_tap_outside: false,
         context: "signin",
         use_fedcm_for_prompt: true,
+        auto_select: false,
       });
 
       if (!isMounted) {
@@ -183,30 +190,41 @@ export function LoginForm({
       }
 
       setIsGoogleReady(didRenderButton);
-      googleAccounts.prompt((notification: GooglePromptMomentNotification) => {
-        try {
-          const notDisplayed = notification?.isNotDisplayed?.();
-          if (notDisplayed) {
-            const reason = notification?.getNotDisplayedReason?.();
-            console.warn("One Tap not displayed:", reason);
-            setGoogleInfo("无法显示 Google 一键登录，已提供按钮登录。");
-          }
+      // 若当前会话标记了跳过 One Tap（通常在登出后），则不自动弹出
+      let shouldPrompt = true;
+      try {
+        shouldPrompt = sessionStorage.getItem("skipOneTap") !== "1";
+      } catch {}
 
-          const dismissed = notification?.isDismissed?.();
-          if (dismissed) {
-            const reason = notification?.getDismissedReason?.();
-            console.warn("One Tap dismissed:", reason);
-            // 用户主动关闭，不提示错误，只保留按钮降级
-          }
+      // 禁用自动选择，避免显示用户信息
+      try {
+        window.google?.accounts?.id?.disableAutoSelect?.();
+      } catch {}
 
-          const displayed = notification?.isDisplayed?.();
-          if (displayed) {
-            setGoogleInfo(null);
+      if (shouldPrompt) {
+        googleAccounts.prompt((notification: GooglePromptMomentNotification) => {
+          try {
+            const notDisplayed = notification?.isNotDisplayed?.();
+            if (notDisplayed) {
+              const reason = notification?.getNotDisplayedReason?.();
+              console.warn("One Tap not displayed:", reason);
+            }
+
+            const dismissed = notification?.isDismissed?.();
+            if (dismissed) {
+              const reason = notification?.getDismissedReason?.();
+              console.warn("One Tap dismissed:", reason);
+            }
+
+            const displayed = notification?.isDisplayed?.();
+            if (displayed) {
+              // 已显示
+            }
+          } catch (e) {
+            console.error("One Tap prompt listener error:", e);
           }
-        } catch (e) {
-          console.error("One Tap prompt listener error:", e);
-        }
-      });
+        });
+      }
     };
 
     if (window.google?.accounts?.id) {
@@ -235,6 +253,9 @@ export function LoginForm({
     return () => {
       isMounted = false;
       window.google?.accounts?.id?.cancel();
+      try {
+        window.google?.accounts?.id?.disableAutoSelect?.();
+      } catch {}
       if (buttonContainer) {
         buttonContainer.innerHTML = "";
       }
@@ -412,11 +433,7 @@ export function LoginForm({
                   <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
                 </div>
               )}
-              {googleInfo && (
-                <div className="rounded-md bg-amber-50 dark:bg-amber-900/20 p-3">
-                  <p className="text-sm text-amber-800 dark:text-amber-200">{googleInfo}</p>
-                </div>
-              )}
+              
               {error && (
                 <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3">
                   <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
