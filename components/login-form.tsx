@@ -16,6 +16,38 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
+const GOOGLE_IDENTITY_SCRIPT = "https://accounts.google.com/gsi/client";
+
+type GoogleCredentialResponse = {
+  credential: string;
+  select_by?: string;
+};
+
+type GoogleAccountsId = {
+  initialize: (options: {
+    client_id: string;
+    callback: (response: GoogleCredentialResponse) => void;
+    cancel_on_tap_outside?: boolean;
+    auto_select?: boolean;
+    context?: "signin" | "signup" | "use";
+    prompt_parent_id?: string;
+    nonce?: string;
+    use_fedcm_for_prompt?: boolean;
+  }) => void;
+  prompt: (momentListener?: (promptMomentNotification: unknown) => void) => void;
+  cancel: () => void;
+};
+
+declare global {
+  interface Window {
+    google?: {
+      accounts?: {
+        id?: GoogleAccountsId;
+      };
+    };
+  }
+}
+
 export function LoginForm({
   className,
   ...props
@@ -26,7 +58,10 @@ export function LoginForm({
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   useEffect(() => {
     // 检查是否有确认成功的参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
@@ -40,6 +75,103 @@ export function LoginForm({
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!googleClientId) {
+      return;
+    }
+
+    let script: HTMLScriptElement | null = null;
+    let isMounted = true;
+
+    const initializeGoogleOneTap = () => {
+      const googleAccounts = window.google?.accounts?.id;
+
+      if (!googleAccounts || !isMounted) {
+        return;
+      }
+
+      googleAccounts.initialize({
+        client_id: googleClientId,
+        callback: async ({ credential }) => {
+          if (!isMounted || !credential) {
+            return;
+          }
+
+          setIsGoogleLoading(true);
+          setError(null);
+          setSuccess(null);
+
+          try {
+            const supabase = createClient();
+            const { error: signInError } =
+              await supabase.auth.signInWithIdToken({
+                provider: "google",
+                token: credential,
+              });
+
+            if (signInError) {
+              throw signInError;
+            }
+
+            router.push("/dashboard");
+            router.refresh();
+          } catch (googleError) {
+            console.error("Google sign-in error:", googleError);
+            const message =
+              googleError instanceof Error
+                ? googleError.message
+                : "Unable to sign in with Google. Please try again.";
+            setError(message);
+            window.google?.accounts?.id?.cancel();
+          } finally {
+            if (isMounted) {
+              setIsGoogleLoading(false);
+            }
+          }
+        },
+        cancel_on_tap_outside: false,
+        context: "signin",
+      });
+
+      if (!isMounted) {
+        return;
+      }
+
+      setIsGoogleReady(true);
+      googleAccounts.prompt();
+    };
+
+    if (window.google?.accounts?.id) {
+      initializeGoogleOneTap();
+    } else {
+      script = document.createElement("script");
+      script.src = GOOGLE_IDENTITY_SCRIPT;
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeGoogleOneTap;
+      script.onerror = () => {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error("Failed to load Google Identity Services script");
+        setError(
+          "Failed to load Google login. Please refresh the page or try again later.",
+        );
+      };
+
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      isMounted = false;
+      window.google?.accounts?.id?.cancel();
+      if (script) {
+        script.remove();
+      }
+    };
+  }, [googleClientId, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +229,16 @@ export function LoginForm({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    if (isGoogleLoading) {
+      return;
+    }
+
+    setError(null);
+    setSuccess(null);
+    window.google?.accounts?.id?.prompt();
   };
 
   const handleResendConfirmation = async () => {
@@ -196,6 +338,29 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
+              {googleClientId && (
+                <>
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                        Or continue with
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleGoogleLogin}
+                    disabled={!isGoogleReady || isGoogleLoading}
+                  >
+                    {isGoogleLoading ? "Connecting..." : "Google"}
+                  </Button>
+                </>
+              )}
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
