@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GOOGLE_IDENTITY_SCRIPT = "https://accounts.google.com/gsi/client";
 
@@ -34,6 +34,22 @@ type GoogleAccountsId = {
     nonce?: string;
     use_fedcm_for_prompt?: boolean;
   }) => void;
+  renderButton: (
+    parent: HTMLElement,
+    options?: {
+      type?: "standard" | "icon";
+      theme?: "outline" | "filled_blue" | "filled_black";
+      size?: "small" | "medium" | "large";
+      text?:
+        | "signin_with"
+        | "signup_with"
+        | "continue_with"
+        | "signin";
+      shape?: "rectangular" | "pill" | "circle" | "square";
+      width?: number | string;
+      logo_alignment?: "left" | "center";
+    },
+  ) => void;
   prompt: (
     momentListener?: (promptMomentNotification: GooglePromptMomentNotification) => void,
   ) => void;
@@ -74,6 +90,7 @@ export function LoginForm({
   const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const googleButtonContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // 检查是否有确认成功的参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
@@ -95,6 +112,7 @@ export function LoginForm({
 
     let script: HTMLScriptElement | null = null;
     let isMounted = true;
+    const buttonContainer = googleButtonContainerRef.current;
 
     const initializeGoogleOneTap = () => {
       const googleAccounts = window.google?.accounts?.id;
@@ -151,7 +169,20 @@ export function LoginForm({
         return;
       }
 
-      setIsGoogleReady(true);
+      let didRenderButton = false;
+      if (buttonContainer) {
+        buttonContainer.innerHTML = "";
+        googleAccounts.renderButton(buttonContainer, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "signin_with",
+          width: "100%",
+        });
+        didRenderButton = true;
+      }
+
+      setIsGoogleReady(didRenderButton);
       googleAccounts.prompt((notification: GooglePromptMomentNotification) => {
         try {
           const notDisplayed = notification?.isNotDisplayed?.();
@@ -195,6 +226,7 @@ export function LoginForm({
         setError(
           "Failed to load Google login. Please refresh the page or try again later.",
         );
+        setIsGoogleReady(false);
       };
 
       document.head.appendChild(script);
@@ -203,6 +235,9 @@ export function LoginForm({
     return () => {
       isMounted = false;
       window.google?.accounts?.id?.cancel();
+      if (buttonContainer) {
+        buttonContainer.innerHTML = "";
+      }
       if (script) {
         script.remove();
       }
@@ -296,16 +331,6 @@ export function LoginForm({
     } finally {
       setIsGoogleRedirectLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    if (isGoogleLoading) {
-      return;
-    }
-
-    setError(null);
-    setSuccess(null);
-    window.google?.accounts?.id?.prompt();
   };
 
   const handleResendConfirmation = async () => {
@@ -410,31 +435,41 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
-              <>
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
+              {googleClientId && (
+                <>
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                        Or continue with
+                      </span>
+                    </div>
                   </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-center">
+                      <div className="w-full" ref={googleButtonContainerRef} />
+                    </div>
+                    {isGoogleLoading && isGoogleReady && (
+                      <p className="text-center text-xs text-muted-foreground">
+                        Signing in with Google...
+                      </p>
+                    )}
+                    {!isGoogleReady && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={handleGoogleRedirectLogin}
+                        disabled={isGoogleRedirectLoading}
+                      >
+                        {isGoogleRedirectLoading ? "Redirecting..." : "Continue with Google"}
+                      </Button>
+                    )}
                   </div>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full"
-                    onClick={googleClientId && isGoogleReady ? handleGoogleLogin : handleGoogleRedirectLogin}
-                    disabled={(googleClientId && isGoogleReady ? isGoogleLoading : isGoogleRedirectLoading)}
-                  >
-                    {(googleClientId && isGoogleReady)
-                      ? (isGoogleLoading ? "Connecting..." : "Google One Tap")
-                      : (isGoogleRedirectLoading ? "Redirecting..." : "Google")}
-                  </Button>
-                </div>
-              </>
+                </>
+              )}
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
