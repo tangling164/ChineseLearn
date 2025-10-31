@@ -54,6 +54,7 @@ type GoogleAccountsId = {
     momentListener?: (promptMomentNotification: GooglePromptMomentNotification) => void,
   ) => void;
   cancel: () => void;
+  disableAutoSelect: () => void;
 };
 
 interface GooglePromptMomentNotification {
