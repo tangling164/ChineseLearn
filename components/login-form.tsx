@@ -59,6 +59,7 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isGoogleRedirectLoading, setIsGoogleRedirectLoading] = useState(false);
   const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -231,6 +232,37 @@ export function LoginForm({
     }
   };
 
+  const handleGoogleRedirectLogin = async () => {
+    if (isGoogleRedirectLoading) {
+      return;
+    }
+
+    try {
+      setError(null);
+      setSuccess(null);
+      setIsGoogleRedirectLoading(true);
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: typeof window !== "undefined" ? `${window.location.origin}/dashboard` : undefined,
+          // 提示同意，获取刷新令牌（可选）
+          queryParams: { prompt: "consent", access_type: "offline" },
+        },
+      });
+      if (oauthError) {
+        throw oauthError;
+      }
+      // Supabase 将会重定向，无需后续处理
+    } catch (oauthErr) {
+      console.error("Google OAuth redirect error:", oauthErr);
+      const message = oauthErr instanceof Error ? oauthErr.message : "Unable to sign in with Google.";
+      setError(message);
+    } finally {
+      setIsGoogleRedirectLoading(false);
+    }
+  };
+
   const handleGoogleLogin = () => {
     if (isGoogleLoading) {
       return;
@@ -338,29 +370,31 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
-              {googleClientId && (
-                <>
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                      </span>
-                    </div>
+              <>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
                   </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     className="w-full"
-                    onClick={handleGoogleLogin}
-                    disabled={!isGoogleReady || isGoogleLoading}
+                    onClick={googleClientId && isGoogleReady ? handleGoogleLogin : handleGoogleRedirectLogin}
+                    disabled={(googleClientId && isGoogleReady ? isGoogleLoading : isGoogleRedirectLoading)}
                   >
-                    {isGoogleLoading ? "Connecting..." : "Google"}
+                    {(googleClientId && isGoogleReady)
+                      ? (isGoogleLoading ? "Connecting..." : "Google One Tap")
+                      : (isGoogleRedirectLoading ? "Redirecting..." : "Google")}
                   </Button>
-                </>
-              )}
+                </div>
+              </>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
