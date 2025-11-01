@@ -48,6 +48,7 @@ type GoogleAccountsId = {
       shape?: "rectangular" | "pill" | "circle" | "square";
       width?: number | string;
       logo_alignment?: "left" | "center";
+      locale?: string;
     },
   ) => void;
   prompt: (
@@ -186,6 +187,7 @@ export function LoginForm({
           size: "large",
           text: "signin_with",
           width: "100%",
+          locale: "en",
         });
         didRenderButton = true;
       }
