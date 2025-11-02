@@ -51,14 +51,24 @@ const handleGoogleLogin = async () => {
 4. **可靠性**：使用 Supabase 标准 OAuth 流程，更稳定
 5. **用户体验**：标准的 Google 登录流程，用户更熟悉
 
-## 环境变量
+## 配置步骤
 
-不再需要 `NEXT_PUBLIC_GOOGLE_CLIENT_ID`，因为 Supabase 会处理 OAuth 配置。
+### 1. 获取 Supabase 回调 URL
+在 Supabase Dashboard → Authentication → Providers → Google 中找到：
+```
+https://[YOUR-PROJECT-REF].supabase.co/auth/v1/callback
+```
 
-只需在 Supabase Dashboard 中配置 Google Provider：
-1. 前往 Authentication → Providers
-2. 启用 Google
-3. 填入 Google Cloud Console 的 Client ID 和 Client Secret
+### 2. 配置 Google Cloud Console
+在 [Google Cloud Console](https://console.cloud.google.com/) 的 OAuth 2.0 Client 中添加：
+- **Authorized redirect URIs**：`https://[YOUR-PROJECT-REF].supabase.co/auth/v1/callback`
+
+### 3. 配置 Supabase
+在 Supabase Dashboard → Authentication → Providers → Google：
+- 启用 Google Provider
+- 填入 Client ID 和 Client Secret
+
+**详细配置步骤请参考：[GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md)**
 
 ## 测试清单
 

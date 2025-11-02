@@ -30,11 +30,16 @@ export function LoginForm({
   const router = useRouter();
 
   useEffect(() => {
-    // 检查是否有确认成功参数
+    // 检查是否有确认成功参数或回调错误
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("confirmed") === "true") {
         setSuccess("Your email has been confirmed. Please log in.");
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      }
+      if (params.get("error") === "auth_callback_error") {
+        setError("Google login failed. Please try again.");
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
       }
@@ -112,7 +117,7 @@ export function LoginForm({
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: typeof window !== "undefined" ? `${window.location.origin}/dashboard` : undefined,
+          redirectTo: typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined,
           queryParams: {
             access_type: "offline",
             prompt: "select_account",
