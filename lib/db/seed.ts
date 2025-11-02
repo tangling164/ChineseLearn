@@ -71,10 +71,9 @@ export async function seedDatabase(options?: { clearExisting?: boolean }) {
       }
 
       // 插入/更新课程项目
-      let itemsInserted = 0;
       for (let i = 0; i < lessonData.items.length; i++) {
         const item = lessonData.items[i];
-        
+
         // 检查项目是否已存在
         const existingItem = await db
           .select()
@@ -110,7 +109,6 @@ export async function seedDatabase(options?: { clearExisting?: boolean }) {
             audio: item.audio,
             order: i + 1,
           });
-          itemsInserted++;
         }
       }
 
