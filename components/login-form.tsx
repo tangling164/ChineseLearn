@@ -14,67 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-
-const GOOGLE_IDENTITY_SCRIPT = "https://accounts.google.com/gsi/client";
-
-type GoogleCredentialResponse = {
-  credential: string;
-  select_by?: string;
-};
-
-type GoogleAccountsId = {
-  initialize: (options: {
-    client_id: string;
-    callback: (response: GoogleCredentialResponse) => void;
-    cancel_on_tap_outside?: boolean;
-    auto_select?: boolean;
-    context?: "signin" | "signup" | "use";
-    prompt_parent_id?: string;
-    nonce?: string;
-    use_fedcm_for_prompt?: boolean;
-  }) => void;
-  renderButton: (
-    parent: HTMLElement,
-    options?: {
-      type?: "standard" | "icon";
-      theme?: "outline" | "filled_blue" | "filled_black";
-      size?: "small" | "medium" | "large";
-      text?:
-        | "signin_with"
-        | "signup_with"
-        | "continue_with"
-        | "signin";
-      shape?: "rectangular" | "pill" | "circle" | "square";
-      width?: number | string;
-      logo_alignment?: "left" | "center";
-      locale?: string;
-    },
-  ) => void;
-  prompt: (
-    momentListener?: (promptMomentNotification: GooglePromptMomentNotification) => void,
-  ) => void;
-  cancel: () => void;
-  disableAutoSelect: () => void;
-};
-
-interface GooglePromptMomentNotification {
-  isNotDisplayed?: () => boolean;
-  getNotDisplayedReason?: () => string | undefined;
-  isDismissed?: () => boolean;
-  getDismissedReason?: () => string | undefined;
-  isDisplayed?: () => boolean;
-}
-
-declare global {
-  interface Window {
-    google?: {
-      accounts?: {
-        id?: GoogleAccountsId;
-      };
-    };
-  }
-}
+import { useEffect, useState } from "react";
 
 export function LoginForm({
   className,
@@ -87,14 +27,10 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isGoogleRedirectLoading, setIsGoogleRedirectLoading] = useState(false);
-  const [isGoogleReady, setIsGoogleReady] = useState(false);
   const router = useRouter();
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const googleButtonContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // 检查是否有确认成功/登出参数（使用 window.location 而非 useSearchParams 以避免 SSR 问题）
+    // 检查是否有确认成功参数
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("confirmed") === "true") {
@@ -102,171 +38,8 @@ export function LoginForm({
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
       }
-      // 登出后抑制 One Tap 弹窗（本会话内）
-      if (params.get("logout") === "true") {
-        try {
-          sessionStorage.setItem("skipOneTap", "1");
-        } catch {}
-        const cleanUrl = window.location.pathname;
-        window.history.replaceState({}, "", cleanUrl);
-      }
     }
   }, []);
-
-  useEffect(() => {
-    if (!googleClientId) {
-      return;
-    }
-
-    let script: HTMLScriptElement | null = null;
-    let isMounted = true;
-    const buttonContainer = googleButtonContainerRef.current;
-
-    const initializeGoogleOneTap = () => {
-      const googleAccounts = window.google?.accounts?.id;
-
-      if (!googleAccounts || !isMounted) {
-        return;
-      }
-
-      googleAccounts.initialize({
-        client_id: googleClientId,
-        callback: async ({ credential }) => {
-          if (!isMounted || !credential) {
-            return;
-          }
-
-          setIsGoogleLoading(true);
-          setError(null);
-          setSuccess(null);
-
-          try {
-            const supabase = createClient();
-            const { error: signInError } =
-              await supabase.auth.signInWithIdToken({
-                provider: "google",
-                token: credential,
-              });
-
-            if (signInError) {
-              throw signInError;
-            }
-
-            router.push("/dashboard");
-            router.refresh();
-          } catch (googleError) {
-            console.error("Google sign-in error:", googleError);
-            const message =
-              googleError instanceof Error
-                ? googleError.message
-                : "Unable to sign in with Google. Please try again.";
-            setError(message);
-            window.google?.accounts?.id?.cancel();
-          } finally {
-            if (isMounted) {
-              setIsGoogleLoading(false);
-            }
-          }
-        },
-        cancel_on_tap_outside: false,
-        context: "signin",
-        use_fedcm_for_prompt: true,
-        auto_select: false,
-      });
-
-      if (!isMounted) {
-        return;
-      }
-
-      let didRenderButton = false;
-      if (buttonContainer) {
-        buttonContainer.innerHTML = "";
-        googleAccounts.renderButton(buttonContainer, {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text: "signin_with",
-          width: "100%",
-          locale: "en",
-        });
-        didRenderButton = true;
-      }
-
-      setIsGoogleReady(didRenderButton);
-      // 若当前会话标记了跳过 One Tap（通常在登出后），则不自动弹出
-      let shouldPrompt = true;
-      try {
-        shouldPrompt = sessionStorage.getItem("skipOneTap") !== "1";
-      } catch {}
-
-      // 禁用自动选择，避免显示用户信息
-      try {
-        window.google?.accounts?.id?.disableAutoSelect?.();
-      } catch {}
-
-      if (shouldPrompt) {
-        googleAccounts.prompt((notification: GooglePromptMomentNotification) => {
-          try {
-            const notDisplayed = notification?.isNotDisplayed?.();
-            if (notDisplayed) {
-              const reason = notification?.getNotDisplayedReason?.();
-              console.warn("One Tap not displayed:", reason);
-            }
-
-            const dismissed = notification?.isDismissed?.();
-            if (dismissed) {
-              const reason = notification?.getDismissedReason?.();
-              console.warn("One Tap dismissed:", reason);
-            }
-
-            const displayed = notification?.isDisplayed?.();
-            if (displayed) {
-              // 已显示
-            }
-          } catch (e) {
-            console.error("One Tap prompt listener error:", e);
-          }
-        });
-      }
-    };
-
-    if (window.google?.accounts?.id) {
-      initializeGoogleOneTap();
-    } else {
-      script = document.createElement("script");
-      script.src = GOOGLE_IDENTITY_SCRIPT;
-      script.async = true;
-      script.defer = true;
-      script.onload = initializeGoogleOneTap;
-      script.onerror = () => {
-        if (!isMounted) {
-          return;
-        }
-
-        console.error("Failed to load Google Identity Services script");
-        setError(
-          "Failed to load Google login. Please refresh the page or try again later.",
-        );
-        setIsGoogleReady(false);
-      };
-
-      document.head.appendChild(script);
-    }
-
-    return () => {
-      isMounted = false;
-      window.google?.accounts?.id?.cancel();
-      try {
-        window.google?.accounts?.id?.disableAutoSelect?.();
-      } catch {}
-      if (buttonContainer) {
-        buttonContainer.innerHTML = "";
-      }
-      if (script) {
-        script.remove();
-      }
-    };
-  }, [googleClientId, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -326,34 +99,35 @@ export function LoginForm({
     }
   };
 
-  const handleGoogleRedirectLogin = async () => {
-    if (isGoogleRedirectLoading) {
+  const handleGoogleLogin = async () => {
+    if (isGoogleLoading) {
       return;
     }
 
     try {
       setError(null);
       setSuccess(null);
-      setIsGoogleRedirectLoading(true);
+      setIsGoogleLoading(true);
       const supabase = createClient();
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: typeof window !== "undefined" ? `${window.location.origin}/dashboard` : undefined,
-          // 提示同意，获取刷新令牌（可选）
-          queryParams: { prompt: "consent", access_type: "offline" },
+          queryParams: {
+            access_type: "offline",
+            prompt: "select_account",
+          },
         },
       });
       if (oauthError) {
         throw oauthError;
       }
-      // Supabase 将会重定向，无需后续处理
+      // Supabase 将会重定向到 Google 登录页面
     } catch (oauthErr) {
-      console.error("Google OAuth redirect error:", oauthErr);
+      console.error("Google OAuth error:", oauthErr);
       const message = oauthErr instanceof Error ? oauthErr.message : "Unable to sign in with Google.";
       setError(message);
-    } finally {
-      setIsGoogleRedirectLoading(false);
+      setIsGoogleLoading(false);
     }
   };
 
@@ -455,41 +229,43 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
-              {googleClientId && (
-                <>
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-center">
-                      <div className="w-full" ref={googleButtonContainerRef} />
-                    </div>
-                    {isGoogleLoading && isGoogleReady && (
-                      <p className="text-center text-xs text-muted-foreground">
-                        Signing in with Google...
-                      </p>
-                    )}
-                    {!isGoogleReady && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full"
-                        onClick={handleGoogleRedirectLogin}
-                        disabled={isGoogleRedirectLoading}
-                      >
-                        {isGoogleRedirectLoading ? "Redirecting..." : "Continue with Google"}
-                      </Button>
-                    )}
-                  </div>
-                </>
-              )}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleLogin}
+                disabled={isGoogleLoading}
+              >
+                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
+                </svg>
+                {isGoogleLoading ? "Redirecting to Google..." : "Sign in with Google"}
+              </Button>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
