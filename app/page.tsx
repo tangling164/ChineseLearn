@@ -5,7 +5,6 @@ import Link from "next/link";
 import { HeroSection } from "@/components/landing/hero-section";
 import { AboutSection } from "@/components/landing/about-section";
 import { FeaturesSection } from "@/components/landing/features-section";
-import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { FooterSection } from "@/components/landing/footer-section";
 
@@ -37,7 +36,6 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <FeaturesSection />
-        <TestimonialsSection />
         <PricingSection />
         <FooterSection />
       </div>

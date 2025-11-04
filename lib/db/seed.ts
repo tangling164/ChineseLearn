@@ -8,7 +8,10 @@ export async function seedDatabase(options?: { clearExisting?: boolean }) {
   const db = getDatabaseForScripts();
   
   try {
-    console.log('开始导入课程数据...');
+    console.log('📊 数据库连接信息:');
+    console.log('  - DIRECT_DATABASE_URL:', process.env.DIRECT_DATABASE_URL ? '已设置' : '未设置');
+    console.log('  - DATABASE_URL:', process.env.DATABASE_URL?.substring(0, 50) + '...');
+    console.log('\n开始导入课程数据...');
     const clearExisting = options?.clearExisting ?? false;
 
     if (clearExisting) {

@@ -24,10 +24,20 @@ export function getDatabaseForScripts() {
   const { connectionString: scriptConnectionString, usesSupabasePooler: scriptUsesPooler } = 
     resolveDatabaseConnection("migrations");
   
+  console.log('🔧 脚本数据库连接配置:');
+  console.log('  - 使用 Pooler:', scriptUsesPooler ? '是' : '否');
+  console.log('  - 连接字符串:', scriptConnectionString.replace(/:[^:@]+@/, ':***@').substring(0, 80) + '...');
+  
   const scriptClient = postgres(scriptConnectionString, {
     prepare: !scriptUsesPooler,
-    connect_timeout: 30, // 脚本可能需要更长的超时时间
+    connect_timeout: 60, // 增加超时时间到 60 秒
     max: 1, // 脚本只用一个连接
+    idle_timeout: 20,
+    max_lifetime: 60 * 30,
+    ssl: 'require', // 明确指定 SSL
+    connection: {
+      application_name: 'type-cn-seed-script',
+    },
   });
 
   return drizzle(scriptClient);
