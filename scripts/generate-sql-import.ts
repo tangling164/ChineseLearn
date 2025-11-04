@@ -80,7 +80,7 @@ BEGIN;
   console.log(`✅ SQL 导入脚本已生成: ${outputPath}`);
   console.log(`\n📊 统计:`);
   console.log(`   - 课程数: ${lessonsData.length}`);
-  console.log(`   - 总项目数: ${lessonsData.reduce((sum, l) => sum + l.items.length, 0)}`);
+  console.log(`   - 总项目数: ${lessonsData.reduce((sum: number, l: any) => sum + l.items.length, 0)}`);
   console.log(`\n📋 使用说明:`);
   console.log(`   1. 打开 Supabase Dashboard → SQL Editor`);
   console.log(`   2. 复制 ${outputPath} 文件中的内容`);
