@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
               <h2 className="text-2xl font-semibold mb-4">5. Payment Information</h2>
               <p className="mb-4">
                 Payment processing is handled by Creem. We do not store your credit card or payment details. 
-                All payment information is encrypted and processed securely by Creem's payment system.
+                All payment information is encrypted and processed securely by Creem&apos;s payment system.
               </p>
             </section>
 
@@ -97,7 +97,7 @@ export default function PrivacyPolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">8. Children's Privacy</h2>
+              <h2 className="text-2xl font-semibold mb-4">8. Children&apos;s Privacy</h2>
               <p className="mb-4">
                 Our service is not intended for children under 13. We do not knowingly 
                 collect personal information from children under 13. If you become aware 
@@ -110,7 +110,7 @@ export default function PrivacyPolicy() {
               <p className="mb-4">
                 We may update this Privacy Policy from time to time. We will notify you 
                 of any changes by posting the new Privacy Policy on this page and updating 
-                the "Last updated" date.
+                the &quot;Last updated&quot; date.
               </p>
             </section>
 

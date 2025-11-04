@@ -22,7 +22,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
               <p className="mb-4">
-                By accessing and using Type中文 ("the Service"), you accept and agree to be bound 
+                By accessing and using Type中文 (&quot;the Service&quot;), you accept and agree to be bound 
                 by the terms and provision of this agreement. If you do not agree to abide 
                 by the above, please do not use this service.
               </p>
@@ -61,7 +61,7 @@ export default function TermsOfService() {
               <ul className="list-disc pl-6 mb-4">
                 <li>Pay all applicable fees as described on the pricing page</li>
                 <li>Provide valid payment information</li>
-                <li>Comply with Creem's terms of service for payment processing</li>
+                <li>Comply with Creem&apos;s terms of service for payment processing</li>
                 <li>Understand that subscriptions automatically renew unless cancelled</li>
                 <li>Cancel your subscription at any time through your account settings</li>
               </ul>
@@ -127,8 +127,8 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">11. Disclaimer</h2>
               <p className="mb-4">
-                Your use of the service is at your sole risk. The service is provided on an "AS IS" 
-                and "AS AVAILABLE" basis. We expressly disclaim all warranties of any kind, 
+                Your use of the service is at your sole risk. The service is provided on an &quot;AS IS&quot; 
+                and &quot;AS AVAILABLE&quot; basis. We expressly disclaim all warranties of any kind, 
                 whether express or implied.
               </p>
             </section>

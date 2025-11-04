@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Mail, Twitter, Github, Linkedin } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export function FooterSection() {
   return (
