@@ -22,9 +22,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm">
-            <Link href="#features" className="hover:text-primary transition-colors">Features</Link>
-            <Link href="#pricing" className="hover:text-primary transition-colors">Pricing</Link>
-            <Link href="#faq" className="hover:text-primary transition-colors">FAQ</Link>
+            <Link href="/#features" className="hover:text-primary transition-colors">Features</Link>
+            <Link href="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
+            <Link href="/#faq" className="hover:text-primary transition-colors">FAQ</Link>
           </div>
           <div className="flex items-center gap-4">
             <ThemeSwitcher />

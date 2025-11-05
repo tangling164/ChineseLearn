@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlayCircle, Zap, Globe } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function HeroSection() {
+  const { user } = useAuth();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       {/* Background Pattern */}
@@ -88,9 +90,9 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-3 text-lg">
-              <Link href="/auth/sign-up">
+              <Link href={user ? "/dashboard" : "/auth/sign-up"}>
                 <PlayCircle className="w-5 h-5 mr-2" />
-                Start Learning Free
+                {user ? "Go to Dashboard" : "Start Learning Free"}
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="px-8 py-3 text-lg">

@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 export function CTASection() {
+  const { user } = useAuth();
   const benefits = [
     "Start learning in under 2 minutes",
     "No credit card required for free trial",
@@ -21,7 +23,7 @@ export function CTASection() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Ready to Master Chinese Typing?
           </h2>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
@@ -54,10 +56,10 @@ export function CTASection() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link
-              href="/auth/sign-up"
+              href={user ? "/dashboard" : "/auth/sign-up"}
               className="group bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
             >
-              Start Learning Now
+              {user ? "Go to Dashboard" : "Start Learning Now"}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
