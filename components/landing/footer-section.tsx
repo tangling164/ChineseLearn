@@ -24,7 +24,7 @@ export function FooterSection() {
               Master Chinese typing through interactive lessons designed for English speakers.
             </p>
             <div className="flex space-x-4">
-              <a href="mailto:tl314841639@gmail.com" className="text-gray-400 hover:text-white transition-colors" title="Email">
+              <a href="mailto:tl18774902382@gmail.com" className="text-gray-400 hover:text-white transition-colors" title="Email">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
@@ -73,7 +73,7 @@ export function FooterSection() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
               <li>
-                <a href="mailto:tl314841639@gmail.com" className="hover:text-white transition-colors">
+                <a href="mailto:tl18774902382@gmail.com" className="hover:text-white transition-colors">
                   Contact Us
                 </a>
               </li>

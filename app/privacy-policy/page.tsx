@@ -120,8 +120,8 @@ export default function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>
               <p className="mb-4">
-                <a href="mailto:tl314841639@gmail.com" className="text-orange-500 hover:text-orange-600">
-                  tl314841639@gmail.com
+                <a href="mailto:tl18774902382@gmail.com" className="text-orange-500 hover:text-orange-600">
+                  tl18774902382@gmail.com
                 </a>
               </p>
             </section>
