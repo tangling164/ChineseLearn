@@ -6,6 +6,8 @@ import { HeroSection } from "@/components/landing/hero-section";
 import { AboutSection } from "@/components/landing/about-section";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { PricingSection } from "@/components/membership/pricing-section";
+import { CTASection } from "@/components/landing/cta-section";
+import { FAQSection } from "@/components/landing/faq-section";
 import { FooterSection } from "@/components/landing/footer-section";
 
 export default function Home() {
@@ -22,7 +24,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-6 text-sm">
             <Link href="#features" className="hover:text-primary transition-colors">Features</Link>
             <Link href="#pricing" className="hover:text-primary transition-colors">Pricing</Link>
-            <Link href="#testimonials" className="hover:text-primary transition-colors">Reviews</Link>
+            <Link href="#faq" className="hover:text-primary transition-colors">FAQ</Link>
           </div>
           <div className="flex items-center gap-4">
             <ThemeSwitcher />
@@ -37,6 +39,8 @@ export default function Home() {
         <AboutSection />
         <FeaturesSection />
         <PricingSection />
+        <CTASection />
+        <FAQSection />
         <FooterSection />
       </div>
     </main>
