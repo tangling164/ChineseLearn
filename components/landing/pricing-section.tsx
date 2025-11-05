@@ -11,10 +11,10 @@ export function PricingSection() {
       name: "Free Trial",
       price: "$0",
       period: "Always Free",
-      description: "Perfect for getting started",
+      description: "Perfect for HSK beginners",
       features: [
-        "3 Basic lessons",
-        "Basic typing practice",
+        "3 HSK Level 1 lessons",
+        "Basic Chinese typing practice",
         "Progress tracking",
         "Community access"
       ],
@@ -27,14 +27,14 @@ export function PricingSection() {
       name: "Monthly Pro",
       price: "$10",
       period: "per month",
-      description: "Full access to all features",
+      description: "Complete Chinese learning course",
       features: [
-        "All lessons unlocked",
-        "Advanced practice modes",
-        "Detailed analytics",
+        "All HSK levels (1-6)",
+        "Advanced typing exercises",
+        "Detailed performance analytics",
         "Priority support",
-        "Download certificates",
-        "Custom practice sets"
+        "HSK completion certificates",
+        "Custom practice for China travel"
       ],
       cta: "Start Pro",
       href: "/auth/sign-up",
@@ -45,14 +45,14 @@ export function PricingSection() {
       name: "Lifetime Access",
       price: "$99",
       period: "one-time payment",
-      description: "Best value for serious learners",
+      description: "Best for international students & professionals",
       features: [
         "Everything in Pro",
-        "Lifetime access",
-        "Future course updates",
-        "Premium support",
-        "Early access to new features",
-        "Exclusive community"
+        "Lifetime access to all courses",
+        "Future HSK updates included",
+        "1-on-1 coaching sessions",
+        "Business Chinese modules",
+        "China travel conversation practice"
       ],
       cta: "Get Lifetime",
       href: "/auth/sign-up",
@@ -72,11 +72,12 @@ export function PricingSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Simple, Transparent{" "}
-            <span className="text-orange-500">Pricing</span>
+            Start Learning Chinese Today -{" "}
+            <span className="text-orange-500">Free Trial Available</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Choose the plan that works for you. No hidden fees, cancel anytime.
+            Affordable Chinese typing courses for international students. 
+            No hidden fees, cancel anytime, 30-day money-back guarantee.
           </p>
         </motion.div>
 

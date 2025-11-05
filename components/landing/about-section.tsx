@@ -15,12 +15,12 @@ export function AboutSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Why Learn Chinese Through{" "}
-            <span className="text-orange-500">Typing?</span>
+            Why International Students Choose{" "}
+            <span className="text-orange-500">Chinese Typing Practice?</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Our unique approach combines muscle memory with language learning, making Chinese character 
-            input second nature while building vocabulary and comprehension.
+            Perfect for HSK exam preparation and life in China. Our typing-based approach helps 
+            you learn Chinese faster than traditional methods by building muscle memory for Pinyin input.
           </p>
         </motion.div>
 
@@ -35,10 +35,10 @@ export function AboutSection() {
             <div className="w-16 h-16 mx-auto mb-6 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Brain className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-xl font-semibold mb-4">Muscle Memory Learning</h3>
+            <h3 className="text-xl font-semibold mb-4">HSK Exam Success</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Build automatic Pinyin input skills through repetitive practice. Your fingers will learn 
-              the patterns while your brain absorbs the language.
+              Specifically designed for HSK computer-based tests. Build speed and accuracy in Chinese 
+              typing to excel in your HSK exam and daily communication in China.
             </p>
           </motion.div>
 
@@ -52,10 +52,10 @@ export function AboutSection() {
             <div className="w-16 h-16 mx-auto mb-6 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Target className="w-8 h-8 text-orange-600 dark:text-orange-400" />
             </div>
-            <h3 className="text-xl font-semibold mb-4">Structured Progression</h3>
+            <h3 className="text-xl font-semibold mb-4">China Travel Ready</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              From basic greetings to advanced conversations. Each lesson builds upon the previous, 
-              ensuring steady progress and confidence.
+              Learn practical Chinese phrases for dining, shopping, and business meetings. 
+              Master typing Chinese characters you&apos;ll use when traveling or working in China.
             </p>
           </motion.div>
 
@@ -69,10 +69,10 @@ export function AboutSection() {
             <div className="w-16 h-16 mx-auto mb-6 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Users className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="text-xl font-semibold mb-4">Community Driven</h3>
+            <h3 className="text-xl font-semibold mb-4">Business Chinese Focus</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Join thousands of learners worldwide. Share progress, compete in challenges, 
-              and learn from the community.
+              Tailored lessons for business professionals and entrepreneurs. Learn Chinese typing 
+              skills for email, documents, and digital communication in the Chinese workplace.
             </p>
           </motion.div>
         </div>

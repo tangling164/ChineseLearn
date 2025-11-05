@@ -49,7 +49,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm font-medium"
           >
             <Zap className="w-4 h-4" />
-            Learn Chinese Through Typing
+            #1 Chinese Typing Practice for Foreigners
           </motion.div>
 
           {/* Main Heading */}
@@ -59,12 +59,13 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
           >
-            Master{" "}
+            Learn{" "}
             <span className="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
               Chinese Typing
-            </span>
+            </span>{" "}
+            Online
             <br />
-            The Fun Way
+            for HSK & China Travel
           </motion.h1>
 
           {/* Subtitle */}
@@ -74,8 +75,9 @@ export function HeroSection() {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
           >
-            Interactive typing lessons designed for English speakers learning Chinese. 
-            Practice Pinyin input with instant feedback and gamified progress tracking.
+            Master Chinese Pinyin typing through interactive lessons designed for international 
+            students, HSK exam candidates, and business travelers heading to China. 
+            Practice typing Chinese characters with instant feedback and structured progression.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -106,7 +108,7 @@ export function HeroSection() {
           >
             <div className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">1000+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Words</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">HSK Words</div>
             </div>
             <div className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-orange-500 dark:text-orange-400">20+</div>

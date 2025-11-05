@@ -7,38 +7,38 @@ export function FeaturesSection() {
   const features = [
     {
       icon: Keyboard,
-      title: "Interactive Typing Practice",
-      description: "Real-time typing practice with instant feedback and auto-correction",
+      title: "HSK Typing Practice",
+      description: "Master Chinese typing for HSK computer-based exams with targeted practice exercises",
       color: "blue"
     },
     {
       icon: Volume2,
-      title: "Audio Pronunciation",
-      description: "Listen to native pronunciation for every word and phrase",
+      title: "Native Audio Support",
+      description: "Learn correct pronunciation with native Chinese audio for every character and word",
       color: "green"
     },
     {
       icon: Trophy,
-      title: "Gamified Learning",
-      description: "Earn points, unlock achievements, and track your progress",
+      title: "Progress Tracking",
+      description: "Monitor your Chinese learning journey with detailed analytics and improvement insights",
       color: "orange"
     },
     {
       icon: Clock,
-      title: "Adaptive Pacing",
-      description: "Learn at your own pace with personalized lesson timing",
+      title: "Learn Chinese Fast",
+      description: "Efficient typing-based method helps you memorize Chinese characters 3x faster",
       color: "purple"
     },
     {
       icon: BookOpen,
-      title: "Structured Curriculum",
-      description: "From basic greetings to complex conversations, step by step",
+      title: "HSK Curriculum",
+      description: "Structured lessons covering all HSK levels from beginner to advanced Chinese learners",
       color: "pink"
     },
     {
       icon: Zap,
-      title: "Instant Feedback",
-      description: "Get immediate corrections and hints to improve quickly",
+      title: "Real-time Corrections",
+      description: "Instant feedback on Pinyin input helps you avoid common mistakes in Chinese typing",
       color: "yellow"
     }
   ];
@@ -66,11 +66,12 @@ export function FeaturesSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Powerful Features for{" "}
-            <span className="text-orange-500">Effective Learning</span>
+            Everything You Need to{" "}
+            <span className="text-orange-500">Learn Chinese Online</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Everything you need to master Chinese typing, from beginner to advanced level.
+            Professional Chinese typing course designed for international students, HSK candidates, 
+            and business professionals preparing for life and work in China.
           </p>
         </motion.div>
 
