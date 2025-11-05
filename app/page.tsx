@@ -16,7 +16,7 @@ export default function Home() {
         <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5 text-sm">
           <div className="flex gap-5 items-center font-semibold">
             <Link href={"/"} className="text-xl font-bold text-primary">
-              Type<span className="text-orange-500">中文</span>
+              Chinese<span className="text-orange-500">101</span>
             </Link>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm">

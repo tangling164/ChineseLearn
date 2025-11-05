@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Type中文",
-  description: "Terms of Service for Type中文 - Chinese typing learning platform",
+  title: "Terms of Service | Chinese101",
+  description: "Terms of Service for Chinese101 - Chinese typing learning platform",
 };
 
 export default function TermsOfService() {
@@ -22,7 +22,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
               <p className="mb-4">
-                By accessing and using Type中文 (&quot;the Service&quot;), you accept and agree to be bound 
+                By accessing and using Chinese101 (&quot;the Service&quot;), you accept and agree to be bound 
                 by the terms and provision of this agreement. If you do not agree to abide 
                 by the above, please do not use this service.
               </p>
@@ -31,7 +31,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
               <p className="mb-4">
-                Type中文 is an interactive Chinese typing learning platform designed for English speakers. 
+                Chinese101 is an interactive Chinese typing learning platform designed for English speakers. 
                 We provide:
               </p>
               <ul className="list-disc pl-6 mb-4">
@@ -83,7 +83,7 @@ export default function TermsOfService() {
               <h2 className="text-2xl font-semibold mb-4">6. Intellectual Property</h2>
               <p className="mb-4">
                 The service and its original content, features, and functionality are and will remain 
-                the exclusive property of Type中文 and its licensors. The service is protected by 
+                the exclusive property of Chinese101 and its licensors. The service is protected by 
                 copyright, trademark, and other laws.
               </p>
             </section>
@@ -117,7 +117,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">10. Limitation of Liability</h2>
               <p className="mb-4">
-                In no event shall Type中文, nor its directors, employees, partners, agents, 
+                In no event shall Chinese101, nor its directors, employees, partners, agents, 
                 suppliers, or affiliates, be liable for any indirect, incidental, special, 
                 consequential, or punitive damages, including without limitation, loss of 
                 profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.

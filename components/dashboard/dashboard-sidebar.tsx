@@ -46,8 +46,8 @@ export function DashboardSidebar() {
       )}>
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 border-r border-gray-200 dark:border-gray-700">
           <div className="flex h-16 shrink-0 items-center">
-            <Link href="/dashboard" className="text-2xl font-bold">
-              Type<span className="text-orange-500">中文</span>
+            <Link href="/" className="text-2xl font-bold">
+              Chinese<span className="text-orange-500">101</span>
             </Link>
           </div>
           <nav className="flex flex-1 flex-col">

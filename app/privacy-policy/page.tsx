@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Type中文",
-  description: "Privacy Policy for Type中文 - Chinese typing learning platform",
+  title: "Privacy Policy | Chinese101",
+  description: "Privacy Policy for Chinese101 - Chinese typing learning platform",
 };
 
 export default function PrivacyPolicy() {

@@ -8,7 +8,7 @@ export function FooterSection() {
   return (
     <footer className="bg-gray-900 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -18,48 +18,16 @@ export function FooterSection() {
             className="col-span-1"
           >
             <Link href="/" className="text-2xl font-bold mb-4 block">
-              Type<span className="text-orange-500">中文</span>
+              Chinese<span className="text-orange-500">101</span>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Master Chinese typing through interactive lessons designed for English speakers.
+              Master Chinese typing through interactive lessons designed for HSK exam preparation and China travel.
             </p>
             <div className="flex space-x-4">
               <a href="mailto:tl18774902382@gmail.com" className="text-gray-400 hover:text-white transition-colors" title="Email">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
-          </motion.div>
-
-          {/* Product */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <h4 className="font-semibold mb-4">Product</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><Link href="#features" className="hover:text-white transition-colors">Features</Link></li>
-              <li><Link href="#pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Roadmap</Link></li>
-            </ul>
-          </motion.div>
-
-          {/* Learning */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <h4 className="font-semibold mb-4">Learning</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><Link href="#" className="hover:text-white transition-colors">Course Catalog</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Learning Path</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Progress Tracking</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Certificates</Link></li>
-            </ul>
           </motion.div>
 
           {/* Support */}
@@ -71,7 +39,6 @@ export function FooterSection() {
           >
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
               <li>
                 <a href="mailto:tl18774902382@gmail.com" className="hover:text-white transition-colors">
                   Contact Us
@@ -90,7 +57,7 @@ export function FooterSection() {
           viewport={{ once: true }}
           className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
         >
-          <p>&copy; 2024 Type中文. All rights reserved.</p>
+          <p>&copy; 2024 Chinese101. All rights reserved.</p>
         </motion.div>
       </div>
     </footer>

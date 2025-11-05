@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Type中文 - Learn Chinese Typing | English to Chinese Typing Course",
+  title: "Chinese101 - Learn Chinese Typing | English to Chinese Typing Course",
   description: "Master Chinese typing with our interactive course. Learn Pinyin input, practice with high-frequency words, and improve your Chinese typing skills through gamified lessons.",
 };
 
