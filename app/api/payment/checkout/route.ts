@@ -54,13 +54,13 @@ export async function POST(request: NextRequest) {
     let productId: string;
     switch (type) {
       case 'single_course':
-        productId = 'prod_q0ZgFiLASKxtLeoo2i57E';
+        productId = process.env.CREEM_SINGLE_COURSE_PRODUCT_ID || 'prod_q0ZgFiLASKxtLeoo2i57E';
         break;
       case 'subscription':
-        productId = 'prod_5i9h0mRDwXhBwMLz6NLAbu';
+        productId = process.env.CREEM_SUBSCRIPTION_PRODUCT_ID || 'prod_5i9h0mRDwXhBwMLz6NLAbu';
         break;
       case 'lifetime':
-        productId = 'prod_3XvVX8gPoOOfPhOfOQwJJj'; 
+        productId = process.env.CREEM_LIFETIME_PRODUCT_ID || 'prod_3XvVX8gPoOOfPhOfOQwJJj';
         break;
       default:
         return NextResponse.json({ error: 'Invalid payment type' }, { status: 400 });
