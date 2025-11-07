@@ -146,7 +146,13 @@ export function PricingSection({
               >
                 <Card className={`h-full ${
                   isPopular ? 'ring-2 ring-orange-500 scale-105' : ''
-                } ${isCurrentPlan ? 'bg-gray-50 dark:bg-gray-800' : ''}`}>
+                } ${
+                  plan.name === 'Free Trial'
+                    ? 'bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/10 dark:to-gray-800'
+                    : isCurrentPlan
+                    ? 'bg-gray-50 dark:bg-gray-800'
+                    : ''
+                }`}>
                   {isPopular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <Badge className="bg-orange-500 text-white">

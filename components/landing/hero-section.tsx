@@ -12,29 +12,6 @@ export function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-      
-      {/* Floating Elements */}
-      <motion.div
-        className="absolute top-20 left-10 text-4xl opacity-20"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        你
-      </motion.div>
-      <motion.div
-        className="absolute top-40 right-20 text-3xl opacity-20"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        好
-      </motion.div>
-      <motion.div
-        className="absolute bottom-40 left-20 text-5xl opacity-20"
-        animate={{ y: [0, -15, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        中
-      </motion.div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div

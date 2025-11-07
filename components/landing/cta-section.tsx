@@ -57,7 +57,7 @@ export function CTASection() {
           >
             <Link
               href={user ? "/dashboard" : "/auth/sign-up"}
-              className="group bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
+              className="group bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
             >
               {user ? "Go to Dashboard" : "Start Learning Now"}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
