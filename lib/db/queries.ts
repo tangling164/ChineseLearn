@@ -64,14 +64,14 @@ export async function getUserProfile(userId: string) {
 
 export async function createOrUpdateUserProfile(userId: string, email: string, fullName?: string) {
   const existing = await getUserProfile(userId);
-  
+
   if (existing) {
     const [updated] = await db
       .update(userProfiles)
-      .set({ 
-        email, 
-        fullName, 
-        updatedAt: new Date() 
+      .set({
+        email,
+        fullName,
+        updatedAt: new Date()
       })
       .where(eq(userProfiles.userId, userId))
       .returning();
@@ -79,13 +79,28 @@ export async function createOrUpdateUserProfile(userId: string, email: string, f
   } else {
     const [created] = await db
       .insert(userProfiles)
-      .values({ 
-        userId, 
-        email, 
-        fullName 
+      .values({
+        userId,
+        email,
+        fullName
       })
       .returning();
     return created;
+  }
+}
+
+// 确保用户 profile 存在（用于 webhook）
+export async function ensureUserProfile(userId: string, email: string, fullName?: string) {
+  try {
+    const existing = await getUserProfile(userId);
+    if (!existing) {
+      console.log('Creating user profile for:', userId);
+      await createOrUpdateUserProfile(userId, email, fullName);
+    }
+    return true;
+  } catch (error) {
+    console.error('Error ensuring user profile:', error);
+    return false;
   }
 }
 

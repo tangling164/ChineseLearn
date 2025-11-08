@@ -75,6 +75,7 @@ export async function POST(request: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/success`,
       metadata: {
         userId: user.id,
+        userEmail: user.email || '',
         paymentType: type,
         ...(lessonId && { lessonId }),
       },

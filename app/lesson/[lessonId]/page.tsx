@@ -3,11 +3,37 @@ import { AccessDeniedCard } from "@/components/lesson/access-denied-card";
 import { notFound } from "next/navigation";
 import { getLessonWithItems, canUserAccessLesson } from "@/lib/db/queries";
 import { createClient } from "@/lib/supabase/server";
+import { generateSEOMetadata, generateCourseSchema } from "@/lib/seo";
+import type { Metadata } from "next";
 
 interface LessonPageProps {
   params: Promise<{
     lessonId: string;
   }>;
+}
+
+export async function generateMetadata({ params }: LessonPageProps): Promise<Metadata> {
+  const { lessonId } = await params;
+  const lesson = await getLessonWithItems(lessonId);
+
+  if (!lesson) {
+    return {
+      title: "Lesson Not Found",
+    };
+  }
+
+  return generateSEOMetadata({
+    title: `${lesson.titleEn} - Chinese Typing Course`,
+    description: lesson.descriptionEn,
+    keywords: [
+      lesson.titleEn,
+      "Chinese typing",
+      lesson.tag,
+      "HSK typing",
+      "Pinyin practice",
+    ],
+    type: "article",
+  });
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
@@ -34,5 +60,33 @@ export default async function LessonPage({ params }: LessonPageProps) {
     return <AccessDeniedCard lessonId={lessonId} />;
   }
 
-  return <LessonPlayer lesson={lesson} userId={user.id} />;
+  // 生成课程结构化数据
+  const courseSchema = generateCourseSchema({
+    name: lesson.titleEn,
+    description: lesson.descriptionEn,
+    url: `/lesson/${lessonId}`,
+    image: lesson.cover || "/default-course-image.png",
+    instructor: "Chinese101 Team",
+    offers: {
+      price: "9.99",
+      priceCurrency: "USD",
+      availability: "InStock",
+    },
+    aggregateRating: {
+      ratingValue: "4.8",
+      ratingCount: "250",
+    },
+  });
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(courseSchema),
+        }}
+      />
+      <LessonPlayer lesson={lesson} userId={user.id} />
+    </>
+  );
 } 

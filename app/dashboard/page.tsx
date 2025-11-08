@@ -3,6 +3,14 @@ import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { RecentLessons } from "@/components/dashboard/recent-lessons";
 import { DashboardWelcome } from "@/components/dashboard/dashboard-welcome";
 import { getUserStats, getUserRecentLessons, createOrUpdateUserProfile } from "@/lib/db/queries";
+import { generateSEOMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: "Dashboard - Your Learning Progress",
+  description: "Track your Chinese typing progress, view completed lessons, and continue your learning journey.",
+  keywords: ["Chinese learning dashboard", "typing progress", "HSK tracking"],
+});
 
 export default async function DashboardPage() {
   const supabase = await createClient();
