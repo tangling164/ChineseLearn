@@ -2,7 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { lessons, userCoursePurchases, paymentTransactions, userProfiles } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import fetch from "node-fetch";
 
 async function testWebhook() {
   console.log("\n🧪 Webhook 测试工具\n");

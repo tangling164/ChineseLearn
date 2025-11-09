@@ -55,7 +55,7 @@ async function manualWebhookTest() {
 
     // 3.3 创建支付交易记录
     console.log("3️⃣ 创建支付交易记录...");
-    const transaction = await createPaymentTransaction({
+    const transactionResult = await createPaymentTransaction({
       userId: user.id,
       creemTransactionId: 'test_tx_' + Date.now(),
       creemOrderId: 'test_order_' + Date.now(),
@@ -67,11 +67,12 @@ async function manualWebhookTest() {
       lessonId: lessonDb.id,
       metadata: { test: true }
     });
-    console.log(`   ✅ Transaction ID: ${transaction[0]?.id}\n`);
+    const transaction = Array.isArray(transactionResult) ? transactionResult[0] : transactionResult;
+    console.log(`   ✅ Transaction ID: ${transaction?.id}\n`);
 
     // 3.4 创建课程购买记录
     console.log("4️⃣ 创建课程购买记录...");
-    const purchase = await createCoursePurchase({
+    const purchaseResult = await createCoursePurchase({
       userId: user.id,
       lessonId: lessonDb.id,
       creemOrderId: 'test_order_' + Date.now(),
@@ -80,7 +81,8 @@ async function manualWebhookTest() {
       amount: 1000,
       currency: 'USD'
     });
-    console.log(`   ✅ Purchase ID: ${purchase[0]?.id}\n`);
+    const purchase = Array.isArray(purchaseResult) ? purchaseResult[0] : purchaseResult;
+    console.log(`   ✅ Purchase ID: ${purchase?.id}\n`);
 
     // 4. 验证结果
     console.log("5️⃣ 验证结果...");

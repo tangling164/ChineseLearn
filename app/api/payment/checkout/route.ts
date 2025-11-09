@@ -14,6 +14,7 @@ interface CheckoutData {
   success_url: string;
   metadata: {
     userId: string;
+    userEmail?: string;
     paymentType: string;
     lessonId?: string;
   };
