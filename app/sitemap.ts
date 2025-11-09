@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { getAllLessons } from "@/lib/db/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://chinese-learn.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://chinese101.app";
   const currentDate = new Date();
 
   // 获取所有课程

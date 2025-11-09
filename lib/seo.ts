@@ -18,11 +18,11 @@ export interface SEOConfig {
   availability?: string;
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chinese-learn.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chinese101.app";
 const SITE_NAME = "Chinese101";
 const DEFAULT_DESCRIPTION =
   "Learn Chinese typing with our interactive course. Master Pinyin input, practice with high-frequency words, and improve your Chinese typing skills through gamified lessons.";
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/og-cover.png`;
 
 /**
  * 生成基础 SEO metadata

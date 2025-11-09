@@ -6,26 +6,30 @@ import { generateWebSiteStructuredData } from "@/lib/seo";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+  : "https://chinese101.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: {
-    default: "Chinese101 - Learn Chinese Typing & Master Pinyin Input",
+    default: "Chinese101 – Learn Chinese for Travel & Business",
     template: "%s | Chinese101",
   },
-  description: "Master Chinese typing with our interactive course. Learn Pinyin input, practice with high-frequency words, and improve your Chinese typing skills through gamified lessons. Perfect for HSK exam preparation.",
+  description: "Quick and practical Chinese lessons for travelers and expats in China. Learn Mandarin phrases fast with our interactive typing course. Master Pinyin input and Chinese characters for real-world travel and business communication.",
   keywords: [
-    "Chinese typing",
-    "Chinese keyboard",
-    "Pinyin input",
     "Learn Chinese",
-    "HSK exam",
-    "Chinese course",
-    "Typing course",
-    "Chinese characters",
+    "Chinese travel",
+    "Chinese business",
+    "Chinese typing",
+    "Mandarin lessons",
+    "Chinese course online",
+    "Pinyin input",
+    "Travel Chinese",
+    "Business Chinese",
+    "Chinese for expats",
+    "Learn Mandarin",
+    "Chinese language course",
     "Interactive Chinese lessons",
-    "Language learning",
+    "Chinese phrases",
   ],
   authors: [{ name: "Chinese101 Team" }],
   creator: "Chinese101",
@@ -38,24 +42,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: defaultUrl,
-    title: "Chinese101 - Learn Chinese Typing & Master Pinyin Input",
-    description: "Master Chinese typing with our interactive course. Learn Pinyin input, practice with high-frequency words, and improve your Chinese typing skills through gamified lessons.",
+    url: "https://chinese101.app",
+    title: "Chinese101 – Learn Chinese for Travel & Business",
+    description: "Quick and practical Chinese lessons for travelers and expats in China. Learn Mandarin phrases fast with our interactive typing course.",
     siteName: "Chinese101",
     images: [
       {
-        url: `${defaultUrl}/og-image.png`,
+        url: "https://chinese101.app/og-cover.png",
         width: 1200,
         height: 630,
-        alt: "Chinese101 - Learn Chinese Typing",
+        alt: "Chinese101 - Learn Chinese for Travel & Business",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chinese101 - Learn Chinese Typing & Master Pinyin Input",
-    description: "Master Chinese typing with our interactive course. Learn Pinyin input, practice with high-frequency words, and improve your Chinese typing skills through gamified lessons.",
-    images: [`${defaultUrl}/og-image.png`],
+    title: "Chinese101 – Learn Chinese for Travel & Business",
+    description: "Quick and practical Chinese lessons for travelers and expats. Master Pinyin and Chinese characters through interactive typing practice.",
+    images: ["https://chinese101.app/og-cover.png"],
     creator: "@chinese101",
   },
   robots: {
@@ -73,7 +77,7 @@ export const metadata: Metadata = {
     google: "your-google-verification-code",
   },
   alternates: {
-    canonical: defaultUrl,
+    canonical: "https://chinese101.app",
   },
 };
 
