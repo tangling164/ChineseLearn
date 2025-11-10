@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: "Chinese101 – Learn Chinese for Travel & Business",
     template: "%s | Chinese101",
   },
-  description: "Quick and practical Chinese lessons for travelers and expats in China. Learn Mandarin phrases fast with our interactive typing course. Master Pinyin input and Chinese characters for real-world travel and business communication.",
+  description: "Practical Chinese lessons for travelers and expats in China. Learn Mandarin with our interactive typing course. Master Pinyin input and Chinese characters for real-world travel and business communication.",
   keywords: [
     "Learn Chinese",
     "Chinese travel",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://chinese101.app",
     title: "Chinese101 – Learn Chinese for Travel & Business",
-    description: "Quick and practical Chinese lessons for travelers and expats in China. Learn Mandarin phrases fast with our interactive typing course.",
+    description: "Practical Chinese lessons for travelers and expats in China. Learn Mandarin with our interactive typing course.",
     siteName: "Chinese101",
     images: [
       {

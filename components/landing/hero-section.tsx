@@ -28,7 +28,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm font-medium"
           >
             <Zap className="w-4 h-4" />
-            #1 Chinese Typing Practice for Foreigners
+            Chinese Typing Practice for Foreigners
           </motion.div>
 
           {/* Main Heading */}
@@ -86,16 +86,16 @@ export function HeroSection() {
             className="grid grid-cols-3 gap-8 pt-12 max-w-md mx-auto"
           >
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">1000+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">HSK Words</div>
+              <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">HSK</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">All Levels</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-orange-500 dark:text-orange-400">20+</div>
+              <div className="text-2xl md:text-3xl font-bold text-orange-500 dark:text-orange-400">Interactive</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Lessons</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400">95%</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Success Rate</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400">Real-time</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Feedback</div>
             </div>
           </motion.div>
         </motion.div>

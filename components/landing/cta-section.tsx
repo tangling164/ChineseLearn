@@ -27,7 +27,7 @@ export function CTASection() {
             Ready to Master Chinese Typing?
           </h2>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already improving their Chinese typing skills with our interactive lessons.
+            Start your Chinese typing journey today with our interactive lessons designed for practical use.
           </p>
 
           {/* Benefits list */}

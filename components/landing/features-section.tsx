@@ -25,8 +25,8 @@ export function FeaturesSection() {
     },
     {
       icon: Clock,
-      title: "Learn Chinese Fast",
-      description: "Efficient typing-based method helps you memorize Chinese characters 3x faster",
+      title: "Learn Chinese Efficiently",
+      description: "Efficient typing-based method helps you build muscle memory for Chinese character input",
       color: "purple"
     },
     {
