@@ -83,19 +83,19 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="grid grid-cols-3 gap-8 pt-12 max-w-md mx-auto"
+            className="grid grid-cols-3 gap-4 pt-12 max-w-2xl mx-auto"
           >
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">HSK</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">All Levels</div>
+              <div className="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">HSK</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">All Levels</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-orange-500 dark:text-orange-400">Interactive</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Lessons</div>
+              <div className="text-xl md:text-2xl font-bold text-orange-500 dark:text-orange-400">Interactive</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Lessons</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400">Real-time</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Feedback</div>
+              <div className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">Instant</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Feedback</div>
             </div>
           </motion.div>
         </motion.div>
