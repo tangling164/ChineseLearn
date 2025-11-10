@@ -17,19 +17,21 @@
 
 ## 🔧 配置详情
 
-在 `app/layout.tsx` 中配置了以下图标链接：
+在 `app/layout.tsx` 中通过 Next.js `metadata.icons` 统一声明 favicon：
 
-```html
-<!-- 主 favicon -->
-<link rel="icon" href="/favicon.ico" />
-<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-
-<!-- Apple 设备图标 -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
-
-<!-- 标准图标尺寸 -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
+```ts
+export const metadata: Metadata = {
+  // ...其他配置
+  icons: {
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.ico", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.ico", type: "image/png", sizes: "16x16" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/favicon.ico", sizes: "180x180" }],
+  },
+};
 ```
 
 ## 🎯 支持的浏览器和设备
@@ -45,6 +47,8 @@
 /public/
 └── favicon.ico    (17.4 KB)  ✅
 ```
+
+> 注：为避免 Next.js 生成的默认 `app/favicon.ico` 覆盖该文件，已移除 `app/favicon.ico`，现在浏览器只会加载 `public/favicon.ico`。
 
 ## ✅ 验证结果
 

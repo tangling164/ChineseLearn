@@ -79,6 +79,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://chinese101.app",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.ico", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.ico", type: "image/png", sizes: "16x16" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/favicon.ico", sizes: "180x180" }],
+  },
 };
 
 const geistSans = Geist({
@@ -104,11 +113,6 @@ export default function RootLayout({
           }}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
