@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { PlayCircle, Zap, Globe } from "lucide-react";
+import { PlayCircle, Zap } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export function HeroSection() {
@@ -64,17 +64,13 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex justify-center"
           >
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-3 text-lg">
               <Link href={user ? "/dashboard" : "/auth/sign-up"}>
                 <PlayCircle className="w-5 h-5 mr-2" />
                 {user ? "Go to Dashboard" : "Start Learning Free"}
               </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="px-8 py-3 text-lg">
-              <Globe className="w-5 h-5 mr-2" />
-              Watch Demo
             </Button>
           </motion.div>
 
