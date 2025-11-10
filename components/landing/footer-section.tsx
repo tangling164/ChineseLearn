@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Mail, X } from "lucide-react";
 
 export function FooterSection() {
   return (
@@ -24,6 +24,15 @@ export function FooterSection() {
                 title="Email"
               >
                 <Mail className="w-5 h-5" />
+              </a>
+              <a
+                href="https://x.com/Lyra_Tang"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                title="X (Twitter)"
+              >
+                <X className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -50,10 +59,15 @@ export function FooterSection() {
             </ul>
           </div>
 
-          {/* Support Links */}
+          {/* Support & Company Links */}
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-3 text-gray-400">
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  About Developer
+                </Link>
+              </li>
               <li>
                 <Link href="/#faq" className="hover:text-white transition-colors">
                   FAQ

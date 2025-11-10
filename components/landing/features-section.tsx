@@ -32,7 +32,7 @@ export function FeaturesSection() {
     {
       icon: BookOpen,
       title: "HSK Curriculum",
-      description: "Structured lessons covering all HSK levels from beginner to advanced Chinese learners",
+      description: "Structured lessons covering all HSK levels from beginner to advanced learners",
       color: "pink"
     },
     {
