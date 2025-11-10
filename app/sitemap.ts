@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { getAllLessons } from "@/lib/db/queries";
 
+export const dynamic = "force-static";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://chinese101.app";
   const currentDate = new Date();

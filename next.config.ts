@@ -65,18 +65,8 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: "/sitemap.xml",
-        destination: "/sitemap",
-      },
-      {
-        source: "/robots.txt",
-        destination: "/robots",
-      },
-    ];
-  },
+  // Removed rewrites to fix sitemap.xml content-type issue
+  // Next.js App Router automatically handles /sitemap and /robots routes
 };
 
 export default nextConfig;
