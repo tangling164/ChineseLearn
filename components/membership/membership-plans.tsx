@@ -197,9 +197,9 @@ export function MembershipPlans() {
         </CardContent>
       </Card>
 
-      {/* Money Back Guarantee */}
+      {/* No Refunds Policy */}
       <div className="text-center text-gray-600 dark:text-gray-400">
-        <p className="mb-4">All plans include 30-day money-back guarantee</p>
+        <p className="mb-4">All purchases are final. No refunds after access is activated.</p>
         <div className="flex flex-wrap justify-center gap-8 text-sm">
           <span>✓ No setup fees</span>
           <span>✓ Cancel anytime</span>

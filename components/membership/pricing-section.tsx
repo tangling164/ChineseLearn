@@ -122,7 +122,7 @@ export function PricingSection({
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Affordable Chinese typing courses for international students. 
-              No hidden fees, cancel anytime, 30-day money-back guarantee.
+              No hidden fees, cancel anytime. All purchases are final.
             </p>
           </motion.div>
         )}
@@ -241,7 +241,7 @@ export function PricingSection({
             className="text-center mt-16"
           >
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              All plans include 30-day money-back guarantee
+              All purchases are final. No refunds after access is activated.
             </p>
             <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
               <span>✓ No setup fees</span>

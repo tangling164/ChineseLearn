@@ -23,7 +23,7 @@ export default function RefundPolicy() {
             Refund & Billing Policy
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mb-8">
-            Last updated: November 5, 2025
+            Last updated: November 10, 2025
           </p>
 
           <div className="space-y-8 text-gray-700 dark:text-gray-300">
@@ -57,58 +57,51 @@ export default function RefundPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                3. 30-Day Money-Back Guarantee
+                3. No Refunds Policy
               </h2>
               <p className="mb-4">
-                We offer a 30-day money-back guarantee for all new subscriptions. If you are not 
-                satisfied with Chinese101 for any reason, you can request a full refund within 30 days 
-                of your initial purchase. To be eligible, your account must not have completed more than 10 lessons.
+                <strong>All purchases on Chinese101.app are final.</strong> As a digital learning service, 
+                access is granted immediately after payment. Therefore, we do not offer refunds once 
+                access has been activated.
               </p>
               <p className="mb-4">
-                To request a refund, please contact us at{" "}
-                <a 
-                  href="mailto:tl18774902382@gmail.com" 
-                  className="text-primary hover:text-primary/80 font-semibold"
-                >
-                  tl18774902382@gmail.com
-                </a>
-                {" "}with your account details and reason for the refund request.
-              </p>
-            </section>
-
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                4. Refund Process
-              </h2>
-              <p className="mb-4">
-                Once your refund request is approved:
+                This policy is in place because:
               </p>
               <ul className="list-disc pl-6 mb-4">
-                <li>You will receive a confirmation email within 24 hours</li>
-                <li>The refund will be processed to your original payment method</li>
-                <li>It may take 5-10 business days for the refund to appear in your account</li>
-                <li>Your access to Chinese101 will be terminated immediately upon refund processing</li>
+                <li>Digital content is immediately accessible upon purchase</li>
+                <li>Users can start learning immediately after payment</li>
+                <li>No physical products are involved</li>
+                <li>Our service is consumed at the time of purchase</li>
               </ul>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                5. Refunds After 30 Days
+                4. Exception: Technical Issues and Billing Errors
               </h2>
               <p className="mb-4">
-                Refunds are generally not provided after the 30-day guarantee period. However, we may 
-                consider refund requests on a case-by-case basis in exceptional circumstances, such as:
+                While we do not offer refunds under normal circumstances, we will assist with:
               </p>
               <ul className="list-disc pl-6 mb-4">
                 <li>Technical issues that prevent you from accessing the service</li>
                 <li>Duplicate or unauthorized charges</li>
                 <li>Documented billing errors</li>
               </ul>
+              <p className="mb-4">
+                If you experience any of these issues, please contact us at{" "}
+                <a 
+                  href="mailto:tl18774902382@gmail.com" 
+                  className="text-primary hover:text-primary/80 font-semibold"
+                >
+                  tl18774902382@gmail.com
+                </a>
+                {" "}with your account details and description of the issue.
+              </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                6. Cancellation
+                5. Cancellation
               </h2>
               <p className="mb-4">
                 You can cancel your subscription at any time from your account settings. Upon cancellation:
@@ -123,7 +116,7 @@ export default function RefundPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                7. Plan Changes
+                6. Plan Changes
               </h2>
               <p className="mb-4">
                 You can upgrade or downgrade your subscription plan at any time:
@@ -142,7 +135,7 @@ export default function RefundPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                8. Failed Payments
+                7. Failed Payments
               </h2>
               <p className="mb-4">
                 If a payment fails:
@@ -157,7 +150,7 @@ export default function RefundPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                9. Price Changes
+                8. Price Changes
               </h2>
               <p className="mb-4">
                 We reserve the right to change our pricing at any time. If we increase the price of 
@@ -173,7 +166,7 @@ export default function RefundPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                10. Contact Us
+                9. Contact Us
               </h2>
               <p className="mb-4">
                 If you have any questions about our refund and billing policies, please contact us at:

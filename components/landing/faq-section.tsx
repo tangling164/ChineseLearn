@@ -65,7 +65,7 @@ export function FAQSection() {
     },
     {
       question: "What is your refund policy?",
-      answer: "We offer a 30-day money-back guarantee for all new subscriptions. If you're not satisfied with Chinese101 within 30 days of your purchase, contact us at tl18774902382@gmail.com for a full refund. To be eligible, your account must not have completed more than 10 lessons. Refunds are processed within 5-10 business days to your original payment method.",
+      answer: "All purchases on Chinese101.app are final. As a digital learning service, access is granted immediately after payment. Therefore, we do not offer refunds once access has been activated. If you experience technical issues or duplicate charges, please contact tl18774902382@gmail.com for assistance.",
     },
     {
       question: "How do I cancel my subscription?",

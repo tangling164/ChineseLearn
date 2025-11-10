@@ -78,7 +78,7 @@ export function CTASection() {
             viewport={{ once: true }}
             className="text-sm text-gray-500 dark:text-gray-400 mt-8"
           >
-            🔒 Secure payment • 30-day money-back guarantee • Cancel anytime
+            🔒 Secure payment • All purchases are final • Cancel anytime
           </motion.p>
         </motion.div>
       </div>

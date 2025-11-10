@@ -70,7 +70,7 @@ export default function MembershipPage() {
         </div>
 
         <div className="text-sm text-gray-500 dark:text-gray-400">
-          <p>All plans include a 30-day money-back guarantee.</p>
+          <p>All purchases are final. No refunds after access is activated.</p>
           <p>Secure payment powered by Creem.</p>
         </div>
       </div>
