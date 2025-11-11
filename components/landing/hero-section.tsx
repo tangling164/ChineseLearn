@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlayCircle, Zap } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { FeedbackButton } from "@/components/feedback/feedback-button";
 
 export function HeroSection() {
   const { user } = useAuth();
@@ -64,14 +65,15 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-3 text-lg">
+            <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-3 text-lg w-full sm:w-auto">
               <Link href={user ? "/dashboard" : "/auth/sign-up"}>
                 <PlayCircle className="w-5 h-5 mr-2" />
                 {user ? "Go to Dashboard" : "Start Learning Free"}
               </Link>
             </Button>
+            <FeedbackButton />
           </motion.div>
 
           {/* Stats */}
